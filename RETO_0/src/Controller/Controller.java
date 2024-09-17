@@ -9,14 +9,67 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 
-public class Controller {
+public class Controller implements IController{
 
     private Connection conexion;
     private PreparedStatement sentencia;
     private ResultSet resultado;
+    
+    final String INSERTARud = "INSERT INTO UnidadDidactica VALUES (?,?,?,?,?)";
+    final String INSERTARce = "INSERT INTO ConvocatoriaExamen VALUES (?,?,?,?,?)";
+    
+    @Override
+	public void registrarUD(Integer id, String acronimo, String titulo, String evaluacion, String descripcion) {
+		this.openConnection();
+		
+		try {
+			sentencia = conexion.prepareStatement(INSERTARud);
+			
+			sentencia.setString(5, descripcion);
+			sentencia.setString(4, evaluacion);
+			sentencia.setString(3, titulo);
+			sentencia.setString(2, acronimo);
+			sentencia.setInt(1, id);
+			
+			sentencia.executeUpdate();
+			
+		} catch (SQLException e) {
+			System.out.println("Error de SQL");
+			e.printStackTrace();
+		} finally {
+                    this.closeConnection();
+		}
 
+	}
+        
+        @Override
+	public void registrarConvocatoria(Integer id, String convocatoria, String descripcion, LocalDate fecha, String curso) {
+		this.openConnection();
+		
+		try {
+			sentencia = conexion.prepareStatement(INSERTARce);
+			
+			sentencia.setString(2, descripcion);
+			sentencia.setString(4, curso);
+			sentencia.setString(3, fecha.format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
+			sentencia.setString(1, convocatoria);
+			sentencia.setInt(5, id);
+			
+			sentencia.executeUpdate();
+			
+		} catch (SQLException e) {
+			System.out.println("Error de SQL");
+			e.printStackTrace();
+		} finally {
+                    this.closeConnection();
+		}
+
+	}
+    
     private void openConnection() {
         try {
             String url = "jdbc:mysql://localhost:3306/examendb?serverTimezone=Europe/Madrid&useSSL=false";

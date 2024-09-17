@@ -5,6 +5,10 @@
  */
 package Aplication;
 
+import Controller.Controller;
+import Model.ConvocatoriaExamen;
+import Model.UnidadDidactica;
+import java.time.LocalDate;
 import utilidades.Util;
 
 /**
@@ -14,7 +18,7 @@ import utilidades.Util;
 public class Main {
 
     public static void main(String[] args) {
-
+        Controller c = new Controller();
         Integer menu = 0;
         do {
 
@@ -32,6 +36,7 @@ public class Main {
             switch (menu) {
 
                 case 1:
+                    insertarUDyCE(c);
                     break;
                 case 2:
                     break;
@@ -49,5 +54,28 @@ public class Main {
 
         } while (menu != 0);
     }
+
+    public static void insertarUDyCE (Controller c) {
+        UnidadDidactica ud = new UnidadDidactica();
+        ConvocatoriaExamen ce = new ConvocatoriaExamen();
+        Integer id;
+        
+        do {
+            ud.setDatos();
+
+            c.registrarUD(ud.getId(), ud.getAcronimo(), ud.getTitulo(), ud.getEvaluacion(), ud.getDescripcion());
+
+            System.out.println("¿Quieres añadir más Unidades Didácticas? ");
+        } while (!Util.introducirCadena().equalsIgnoreCase("no"));        
+        
+        do {
+            id = ce.setDatos();
+
+            c.registrarConvocatoria(id, ce.getConvocatoria(), ce.getDescripcion(), ce.getFecha(), ce.getCurso());
+
+            System.out.println("¿Quieres añadir más Convocatorias de Exámen? ");
+        } while (!Util.introducirCadena().equalsIgnoreCase("no"));     
+        
+}
 
 }

@@ -5,8 +5,13 @@
  */
 package Controller;
 
+import java.time.LocalDate;
+
 
 public interface IController {
     
+    public void registrarUD(Integer id, String acronimo, String titulo, String evaluacion, String descripcion);
+    
+    public void registrarConvocatoria(Integer id, String convocatoria, String descripcion, LocalDate fecha, String curso);
     
 }

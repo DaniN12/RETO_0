@@ -6,6 +6,8 @@
 package Model;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
+import utilidades.Util;
 
 public class ConvocatoriaExamen {
 
@@ -66,4 +68,30 @@ public class ConvocatoriaExamen {
     public void setCurso(String curso) {
         this.curso = curso;
     }
+    
+    public Integer setDatos() {
+        LocalDate fecha;
+        Boolean bien = false;
+        
+        System.out.println("Convocatoria de la Convocatoria de Exámen: ");
+        this.convocatoria = Util.introducirCadena();
+        System.out.println("Descripción breve de la Convocatoria de Exámen: ");
+        this.descripcion =  Util.introducirCadena();
+        do {
+            System.out.println("Fecha de la Convocatoria de Exámen: (dd/MM/yyyy)");
+            try {
+                fecha = Util.leerFechaDMA();
+                bien = true;
+            } catch (DateTimeParseException e) {
+                System.out.println("Formato de fecha incorrecto. Intenta de nuevo.");
+            }
+        } while (!bien);
+        System.out.println("Curso de la Convocatoria de Exámen: ");
+        this.curso =  Util.introducirCadena();
+        System.out.println("ID del Enunciado asociado a la Convocatoria de Exámen: ");
+	Integer id = Util.leerInt();
+        
+        return id;
+}
+    
 }
