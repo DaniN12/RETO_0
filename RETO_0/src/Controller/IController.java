@@ -5,8 +5,14 @@
  */
 package Controller;
 
+import Model.Dificultad;
+
 
 public interface IController {
     
-    
+public boolean anadirEnunciado(int id, String descripcion, Dificultad nivel, boolean disponible, String ruta);
+
+public boolean anadirEnunciadoAUd( int id_E, int id_UD);
+
+public boolean mostrarUD(int id, String acronimo, String titulo, String evaluacion, String descripcion);
 }

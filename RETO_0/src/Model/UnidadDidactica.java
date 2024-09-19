@@ -75,4 +75,9 @@ public class UnidadDidactica {
     public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
     }
+    
+    public void getDatos(){
+        
+        System.out.println("");
+    }
 }

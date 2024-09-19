@@ -5,6 +5,8 @@
  */
 package Aplication;
 
+import Controller.Controller;
+import Model.Enunciado;
 import utilidades.Util;
 
 /**
@@ -16,6 +18,7 @@ public class Main {
     public static void main(String[] args) {
 
         Integer menu = 0;
+        Controller c = new Controller();
         do {
 
             System.out.println("1.- Crear una unidad didáctica (Unidad) y convocatoria (Convocatoria) de examen. ");
@@ -34,6 +37,7 @@ public class Main {
                 case 1:
                     break;
                 case 2:
+                    anadirEnunciado(c);
                     break;
                 case 3:
                     break;
@@ -50,4 +54,22 @@ public class Main {
         } while (menu != 0);
     }
 
+    public static void anadirEnunciado(Controller c) {
+
+        String resp = "";
+        Enunciado e = new Enunciado();
+
+        do {
+            e.setDatos();
+            c.anadirEnunciado(e.getId(), e.getDescripcion(), e.getNivel(), e.isDisponible(), e.getRuta());
+            System.out.println("Selecciona la unidad didactica a la que deseas añadir el enunciado: ");
+            
+            int id = Util.leerInt();
+            c.anadirEnunciadoAUd(e.getId(), id);
+            System.out.println("¿Desea añadir mas enunciados? SI/NO");
+            resp = Util.introducirCadena();
+
+        } while (!resp.equalsIgnoreCase("NO"));
+
+    }
 }
