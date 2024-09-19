@@ -59,19 +59,19 @@ public class Main {
         UnidadDidactica ud = new UnidadDidactica();
         ConvocatoriaExamen ce = new ConvocatoriaExamen();
         Integer id;
-        
+        /*
         do {
             ud.setDatos();
 
             c.registrarUD(ud.getId(), ud.getAcronimo(), ud.getTitulo(), ud.getEvaluacion(), ud.getDescripcion());
 
             System.out.println("¿Quieres añadir más Unidades Didácticas? ");
-        } while (!Util.introducirCadena().equalsIgnoreCase("no"));        
+        } while (!Util.introducirCadena().equalsIgnoreCase("no"));  */      
         
         do {
-            id = ce.setDatos();
+            ce.setDatos();
 
-            c.registrarConvocatoria(id, ce.getConvocatoria(), ce.getDescripcion(), ce.getFecha(), ce.getCurso());
+            c.registrarConvocatoria(ce.getConvocatoria(), ce.getDescripcion(), ce.getFecha(), ce.getCurso());
 
             System.out.println("¿Quieres añadir más Convocatorias de Exámen? ");
         } while (!Util.introducirCadena().equalsIgnoreCase("no"));     

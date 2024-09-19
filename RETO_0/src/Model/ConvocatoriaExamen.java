@@ -69,11 +69,11 @@ public class ConvocatoriaExamen {
         this.curso = curso;
     }
     
-    public Integer setDatos() {
+    public void setDatos() {
         LocalDate fecha;
         Boolean bien = false;
         
-        System.out.println("Convocatoria de la Convocatoria de Exámen: ");
+        System.out.println("Convocatoria de Exámen: ");
         this.convocatoria = Util.introducirCadena();
         System.out.println("Descripción breve de la Convocatoria de Exámen: ");
         this.descripcion =  Util.introducirCadena();
@@ -81,6 +81,7 @@ public class ConvocatoriaExamen {
             System.out.println("Fecha de la Convocatoria de Exámen: (dd/MM/yyyy)");
             try {
                 fecha = Util.leerFechaDMA();
+                this.fecha = fecha;
                 bien = true;
             } catch (DateTimeParseException e) {
                 System.out.println("Formato de fecha incorrecto. Intenta de nuevo.");
@@ -88,10 +89,7 @@ public class ConvocatoriaExamen {
         } while (!bien);
         System.out.println("Curso de la Convocatoria de Exámen: ");
         this.curso =  Util.introducirCadena();
-        System.out.println("ID del Enunciado asociado a la Convocatoria de Exámen: ");
-	Integer id = Util.leerInt();
         
-        return id;
 }
     
 }

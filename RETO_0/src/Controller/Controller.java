@@ -5,6 +5,7 @@
  */
 package Controller;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -20,7 +21,7 @@ public class Controller implements IController{
     private ResultSet resultado;
     
     final String INSERTARud = "INSERT INTO UnidadDidactica VALUES (?,?,?,?,?)";
-    final String INSERTARce = "INSERT INTO ConvocatoriaExamen VALUES (?,?,?,?,?)";
+    final String INSERTARce = "INSERT INTO ConvocatoriaExamen (convocatoria, descripcion, fecha, curso) VALUES (?,?,?,?)";
     
     @Override
 	public void registrarUD(Integer id, String acronimo, String titulo, String evaluacion, String descripcion) {
@@ -47,17 +48,16 @@ public class Controller implements IController{
 	}
         
         @Override
-	public void registrarConvocatoria(Integer id, String convocatoria, String descripcion, LocalDate fecha, String curso) {
+	public void registrarConvocatoria(String convocatoria, String descripcion, LocalDate fecha, String curso) {
 		this.openConnection();
-		
+                
 		try {
 			sentencia = conexion.prepareStatement(INSERTARce);
 			
 			sentencia.setString(2, descripcion);
 			sentencia.setString(4, curso);
-			sentencia.setString(3, fecha.format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
+			sentencia.setDate(3, Date.valueOf(fecha));
 			sentencia.setString(1, convocatoria);
-			sentencia.setInt(5, id);
 			
 			sentencia.executeUpdate();
 			
