@@ -58,23 +58,29 @@ public class Main {
     public static void insertarUDyCE (Controller c) {
         UnidadDidactica ud = new UnidadDidactica();
         ConvocatoriaExamen ce = new ConvocatoriaExamen();
-        Integer id;
-        /*
-        do {
-            ud.setDatos();
 
-            c.registrarUD(ud.getId(), ud.getAcronimo(), ud.getTitulo(), ud.getEvaluacion(), ud.getDescripcion());
+        System.out.println("Quieres añadir unidad/es didáctica/s?");
+        if (Util.introducirCadena().equalsIgnoreCase("si")) {
+            do {
+                ud.setDatos();
 
-            System.out.println("¿Quieres añadir más Unidades Didácticas? ");
-        } while (!Util.introducirCadena().equalsIgnoreCase("no"));  */      
+                c.registrarUD(ud.getId(), ud.getAcronimo(), ud.getTitulo(), ud.getEvaluacion(), ud.getDescripcion());
+
+                System.out.println("¿Quieres añadir más Unidades Didácticas? ");
+            } while (Util.introducirCadena().equalsIgnoreCase("si"));      
+        }
         
-        do {
-            ce.setDatos();
+        System.out.println("Quieres añadir convocatoria/s de exámen?");
+        if (Util.introducirCadena().equalsIgnoreCase("si")) {
+            do {
+                ce.setDatos();
 
-            c.registrarConvocatoria(ce.getConvocatoria(), ce.getDescripcion(), ce.getFecha(), ce.getCurso());
+                c.registrarConvocatoria(ce.getConvocatoria(), ce.getDescripcion(), ce.getFecha(), ce.getCurso());
 
-            System.out.println("¿Quieres añadir más Convocatorias de Exámen? ");
-        } while (!Util.introducirCadena().equalsIgnoreCase("no"));     
+                System.out.println("¿Quieres añadir más Convocatorias de Exámen? ");
+            } while (Util.introducirCadena().equalsIgnoreCase("si"));  
+
+        }
         
 }
 
