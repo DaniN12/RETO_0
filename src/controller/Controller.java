@@ -7,7 +7,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 
-public class Controller {
+public class Controller implements IController{
 
     private Connection conexion;
     private PreparedStatement sentencia;
@@ -36,4 +36,29 @@ public class Controller {
             error.printStackTrace();
         }
     }
+
+    @Override
+    public String obtenerRutaDocumentoEnunciado(int idEnunciado) {
+        String ruta = null;
+        try {
+            openConnection();  // Abrir conexión
+            String query = "SELECT ruta FROM Enunciado WHERE id_Enunciado = ?";
+            sentencia = conexion.prepareStatement(query);
+            sentencia.setInt(1, idEnunciado);
+            resultado = sentencia.executeQuery();
+            
+            if (resultado.next()) {
+                ruta = resultado.getString("ruta");
+            } else {
+                System.out.println("Enunciado no encontrado.");
+            }
+        } catch (SQLException error) {
+            System.out.println("Error al consultar enunciado: " + error.getMessage());
+            error.printStackTrace();
+        } finally {
+            closeConnection();  // Cerrar conexión
+        }
+        return ruta;
+    }
+
 }
