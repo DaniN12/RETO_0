@@ -5,7 +5,10 @@
  */
 package Controller;
 
+import Model.ConvocatoriaExamen;
 import Model.Dificultad;
+import Model.UnidadDidactica;
+import java.util.ArrayList;
 
 
 public interface IController {
@@ -14,5 +17,9 @@ public boolean anadirEnunciado(int id, String descripcion, Dificultad nivel, boo
 
 public boolean anadirEnunciadoAUd( int id_E, int id_UD);
 
-public boolean mostrarUD(int id, String acronimo, String titulo, String evaluacion, String descripcion);
+public ArrayList<UnidadDidactica> getUDs();
+
+public boolean anadirEnunciadoACe( String convocatoria, int id_E);
+
+public ArrayList<ConvocatoriaExamen> getCEs();
 }

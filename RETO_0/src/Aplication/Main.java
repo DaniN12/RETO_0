@@ -6,7 +6,10 @@
 package Aplication;
 
 import Controller.Controller;
+import Model.ConvocatoriaExamen;
 import Model.Enunciado;
+import Model.UnidadDidactica;
+import java.util.ArrayList;
 import utilidades.Util;
 
 /**
@@ -55,21 +58,60 @@ public class Main {
     }
 
     public static void anadirEnunciado(Controller c) {
-
-        String resp = "";
+        
         Enunciado e = new Enunciado();
 
         do {
             e.setDatos();
             c.anadirEnunciado(e.getId(), e.getDescripcion(), e.getNivel(), e.isDisponible(), e.getRuta());
-            System.out.println("Selecciona la unidad didactica a la que deseas añadir el enunciado: ");
-            
-            int id = Util.leerInt();
-            c.anadirEnunciadoAUd(e.getId(), id);
-            System.out.println("¿Desea añadir mas enunciados? SI/NO");
-            resp = Util.introducirCadena();
 
-        } while (!resp.equalsIgnoreCase("NO"));
+            do {
+                int id = arrayUDs(c);
+                c.anadirEnunciadoAUd(e.getId(), id);
+                System.out.println("¿Desea añadir mas enunciados a otras unidades didacticas? SI/NO");
+
+            } while (!Util.introducirCadena().equalsIgnoreCase("NO"));
+
+            do {
+                String conv = arrayCEs(c);
+                c.anadirEnunciadoACe(conv, e.getId());
+                System.out.println("¿Desea añadir mas enunciados a otras convocatorias de examen? SI/NO");
+
+            } while (!Util.introducirCadena().equalsIgnoreCase("NO"));
+
+            System.out.println("¿Desea añadir mas enunciados? SI/NO");
+
+        } while (!Util.introducirCadena().equalsIgnoreCase("NO"));
+
+    }
+
+    public static int arrayUDs(Controller c) {
+
+        ArrayList<UnidadDidactica> uds = c.getUDs();
+
+        System.out.println("Selecciona la unidad didactica a la que deseas añadir el enunciado: ");
+        for (UnidadDidactica ud : uds) {
+            System.out.println(uds.indexOf(ud) + 1 + "- " + ud.getTitulo());
+
+        }
+        int id = Util.leerInt();
+        return id;
+
+    }
+
+    public static String arrayCEs(Controller c) {
+
+        ArrayList<ConvocatoriaExamen> ces = c.getCEs();
+
+        System.out.println("Selecciona la convocatoria de examen a la que deseas añadir el enunciado: ");
+        for (ConvocatoriaExamen ce : ces) {
+            System.out.println(ces.indexOf(ce) + 1 + "- " + ce.getConvocatoria());
+
+        }
+        int conv = Util.leerInt();
+        ConvocatoriaExamen ceSeleccionada = ces.get(conv - 1);
+
+        return ceSeleccionada.getConvocatoria();
 
     }
 }
