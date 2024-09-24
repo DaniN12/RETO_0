@@ -22,4 +22,8 @@ public ArrayList<UnidadDidactica> getUDs();
 public boolean anadirEnunciadoACe( String convocatoria, int id_E);
 
 public ArrayList<ConvocatoriaExamen> getCEs();
+  
+public void asignarEnunciado();
+    
+
 }

@@ -22,19 +22,20 @@ public class Main {
 
         Integer menu = 0;
         Controller c = new Controller();
+      
         do {
-
-            System.out.println("1.- Crear una unidad didáctica (Unidad) y convocatoria (Convocatoria) de examen. ");
-            System.out.println("2.- Crear un enunciado de examen agregando las unidades didácticas que va a referir.\n"
-                    + "\tTambién se asociará a este enunciado la convocatoria para la que se crea.  ");
-            System.out.println("3.- Consultar los enunciados de examen en los que se trata una unidad didáctica concreta. ");
-            System.out.println("4.- Consultar en que convocatorias se ha utilizado un enunciado concreto. ");
-            System.out.println("5.- Visualizar el documento de texto asociado a un enunciado.  ");
-            System.out.println("6.- Asignar un enunciado a una convocatoria. ");
-            System.out.println("0.- Salir ");
+            System.out.println("\t\tBIENVENIDO A FLUTTER\n"
+                    + "MENÚ:\n"
+                    + "1.- Crear unidad didáctica y convocatoria de examen.\n"
+                    + "2.- Crear enunciado de examen agregando las unidades didácticas.\n"
+                    + "3.- Consultar enunciados examen\n"
+                    + "4.- Consultar convocatorias enunciado.\n"
+                    + "5.- Visualizar el documento de texto asociado a un enunciado.\n"
+                    + "6.- Asignar un enunciado a una convocatoria.\n"
+                    + "0.- Salir\n"
+                    + "Por favor seleccione una opción:");
 
             menu = Util.leerInt(0, 6);
-
             switch (menu) {
 
                 case 1:
@@ -49,6 +50,7 @@ public class Main {
                 case 5:
                     break;
                 case 6:
+                    InsertarEnunciados(c);
                     break;
                 case 0:
 
@@ -113,5 +115,9 @@ public class Main {
 
         return ceSeleccionada.getConvocatoria();
 
+    }
+    public static void InsertarEnunciados(Controller controller) {
+        // Preguntar al usuario por la convocatoria
+        controller.asignarEnunciado();
     }
 }
