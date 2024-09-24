@@ -5,8 +5,12 @@
  */
 package Controller;
 
+import Model.ConvocatoriaExamen;
+
 
 public interface IController {
+    
+    public void asignarEnunciado();
     
     
 }
