@@ -79,6 +79,10 @@ public class UnidadDidactica {
         this.descripcion = descripcion;
     }
     
+    public void getDatos(){
+        
+        System.out.println("");
+    }
     public void setDatos() {
                 System.out.println("ID de la Unidad Didáctica: ");
 		this.id = Util.leerInt();
@@ -91,5 +95,4 @@ public class UnidadDidactica {
                 System.out.println("Descripción breve de la Unidad Didáctica: ");
 		this.descripcion =  Util.introducirCadena();
 	}
-    
 }
