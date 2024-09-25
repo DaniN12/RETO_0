@@ -5,6 +5,9 @@
  */
 package Model;
 
+import Controller.Controller;
+import utilidades.Util;
+
 public class UnidadDidactica {
 
     private int id;
@@ -80,4 +83,16 @@ public class UnidadDidactica {
         
         System.out.println("");
     }
+    public void setDatos() {
+                System.out.println("ID de la Unidad Didáctica: ");
+		this.id = Util.leerInt();
+		System.out.println("Acrónimo de la Unidad Didáctica: ");
+		this.acronimo =  Util.introducirCadena();
+		System.out.println("Título de la Unidad Didáctica: ");
+		this.titulo =  Util.introducirCadena();
+		System.out.println("Evaluación de la Unidad Didáctica: ");
+		this.evaluacion =  Util.introducirCadena();
+                System.out.println("Descripción breve de la Unidad Didáctica: ");
+		this.descripcion =  Util.introducirCadena();
+	}
 }

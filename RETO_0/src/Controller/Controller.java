@@ -9,6 +9,7 @@ import Model.ConvocatoriaExamen;
 import Model.Dificultad;
 import Model.UnidadDidactica;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -19,8 +20,10 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.ArrayList;
 import utilidades.Util;
+import java.time.format.DateTimeFormatter;
 
-public class Controller implements IController {
+
+public class Controller implements IController{
 
     private Connection conexion;
     private PreparedStatement sentencia;
@@ -34,7 +37,57 @@ public class Controller implements IController {
     final String getConvocatoria = "SELECT Convocatoria FROM ConvocatoriaExamen where id_Enunciado is null";
     final String getEnunciado = "SELECT id, descripcion FROM Enunciado";
     final String UPDATEConvocatoria ="UPDATE ConvocatoriaExamen SET id_Enunciado = ? WHERE convocatoria = ?";
+    
+    final String INSERTARud = "INSERT INTO UnidadDidactica VALUES (?,?,?,?,?)";
+    final String INSERTARce = "INSERT INTO ConvocatoriaExamen (convocatoria, descripcion, fecha, curso) VALUES (?,?,?,?)";
+    
+    @Override
+	public void registrarUD(Integer id, String acronimo, String titulo, String evaluacion, String descripcion) {
+		this.openConnection();
+		
+		try {
+			sentencia = conexion.prepareStatement(INSERTARud);
+			
+			sentencia.setString(5, descripcion);
+			sentencia.setString(4, evaluacion);
+			sentencia.setString(3, titulo);
+			sentencia.setString(2, acronimo);
+			sentencia.setInt(1, id);
+			
+			sentencia.executeUpdate();
+			
+		} catch (SQLException e) {
+			System.out.println("Error de SQL");
+			e.printStackTrace();
+		} finally {
+                    this.closeConnection();
+		}
 
+	}
+        
+        @Override
+	public void registrarConvocatoria(String convocatoria, String descripcion, LocalDate fecha, String curso) {
+		this.openConnection();
+                
+		try {
+			sentencia = conexion.prepareStatement(INSERTARce);
+			
+			sentencia.setString(2, descripcion);
+			sentencia.setString(4, curso);
+			sentencia.setDate(3, Date.valueOf(fecha));
+			sentencia.setString(1, convocatoria);
+			
+			sentencia.executeUpdate();
+			
+		} catch (SQLException e) {
+			System.out.println("Error de SQL");
+			e.printStackTrace();
+		} finally {
+                    this.closeConnection();
+		}
+
+	}
+    
     private void openConnection() {
         try {
             String url = "jdbc:mysql://localhost:3306/examendb?serverTimezone=Europe/Madrid&useSSL=false";

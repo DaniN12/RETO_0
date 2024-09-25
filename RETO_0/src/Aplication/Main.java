@@ -10,6 +10,8 @@ import Model.ConvocatoriaExamen;
 import Model.Enunciado;
 import Model.UnidadDidactica;
 import java.util.ArrayList;
+import Model.UnidadDidactica;
+import java.time.LocalDate;
 import utilidades.Util;
 
 /**
@@ -19,7 +21,7 @@ import utilidades.Util;
 public class Main {
 
     public static void main(String[] args) {
-
+        Controller c = new Controller();
         Integer menu = 0;
         Controller c = new Controller();
       
@@ -39,6 +41,7 @@ public class Main {
             switch (menu) {
 
                 case 1:
+                    insertarUDyCE(c);
                     break;
                 case 2:
                     anadirEnunciado(c);
@@ -120,4 +123,34 @@ public class Main {
         // Preguntar al usuario por la convocatoria
         controller.asignarEnunciado();
     }
+
+    public static void insertarUDyCE (Controller c) {
+        UnidadDidactica ud = new UnidadDidactica();
+        ConvocatoriaExamen ce = new ConvocatoriaExamen();
+
+        System.out.println("Quieres añadir unidad/es didáctica/s?");
+        if (Util.introducirCadena().equalsIgnoreCase("si")) {
+            do {
+                ud.setDatos();
+
+                c.registrarUD(ud.getId(), ud.getAcronimo(), ud.getTitulo(), ud.getEvaluacion(), ud.getDescripcion());
+
+                System.out.println("¿Quieres añadir más Unidades Didácticas? ");
+            } while (Util.introducirCadena().equalsIgnoreCase("si"));      
+        }
+        
+        System.out.println("Quieres añadir convocatoria/s de exámen?");
+        if (Util.introducirCadena().equalsIgnoreCase("si")) {
+            do {
+                ce.setDatos();
+
+                c.registrarConvocatoria(ce.getConvocatoria(), ce.getDescripcion(), ce.getFecha(), ce.getCurso());
+
+                System.out.println("¿Quieres añadir más Convocatorias de Exámen? ");
+            } while (Util.introducirCadena().equalsIgnoreCase("si"));  
+
+        }
+        
+}
+
 }

@@ -9,7 +9,7 @@ import Model.ConvocatoriaExamen;
 import Model.Dificultad;
 import Model.UnidadDidactica;
 import java.util.ArrayList;
-
+import java.time.LocalDate;
 
 public interface IController {
     
@@ -24,6 +24,9 @@ public boolean anadirEnunciadoACe( String convocatoria, int id_E);
 public ArrayList<ConvocatoriaExamen> getCEs();
   
 public void asignarEnunciado();
+
+public void registrarUD(Integer id, String acronimo, String titulo, String evaluacion, String descripcion);
     
+public void registrarConvocatoria(String convocatoria, String descripcion, LocalDate fecha, String curso);
 
 }
