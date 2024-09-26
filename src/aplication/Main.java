@@ -9,6 +9,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.List;
 
 import controller.Controller;
 import controller.IController;
@@ -70,7 +71,21 @@ public class Main {
     }
 
     private static void consultarConvocatoria() {
+        int id;
+        System.out.println("Introduzca el ID de un enunciado para consultar sus convocatorias:");
+        id = Util.leerInt();  // Leer el ID del enunciado
 
+        IController controller = new Controller();  // Instanciar el controlador
+        List<String> convocatorias = controller.obtenerConvocatoriasDeEnunciado(id);  // Obtener las convocatorias del enunciado
+
+        if (convocatorias != null && !convocatorias.isEmpty()) {
+            System.out.println("El enunciado ha sido utilizado en las siguientes convocatorias:");
+            for (String convocatoria : convocatorias) {
+                System.out.println("- " + convocatoria);  // Mostrar cada convocatoria
+            }
+        } else {
+            System.out.println("El enunciado no ha sido utilizado en ninguna convocatoria o no existe.");
+        }
     }
 
     private static void visualizarDocumento() {

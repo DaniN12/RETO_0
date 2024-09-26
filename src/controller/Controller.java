@@ -5,6 +5,8 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class Controller implements IController{
@@ -59,6 +61,21 @@ public class Controller implements IController{
             closeConnection();  // Cerrar conexión
         }
         return ruta;
+    }
+
+    @Override
+    public List<String> obtenerConvocatoriasDeEnunciado(int idEnunciado) {
+        // Aquí va la lógica para obtener las convocatorias desde la base de datos o servicio
+
+        // Simulamos algunos datos para el enunciado con ID 1
+        if (idEnunciado == 1) {
+            List<String> convocatorias = new ArrayList<>();
+            convocatorias.add("Convocatoria Enero 2024");
+            convocatorias.add("Convocatoria Junio 2024");
+            return convocatorias;
+        } else {
+            return new ArrayList<>();  // Si el enunciado no se ha usado en ninguna convocatoria
+        }
     }
 
 }
