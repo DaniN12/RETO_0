@@ -7,6 +7,7 @@ package Controller;
 
 import Model.ConvocatoriaExamen;
 import Model.Dificultad;
+import Model.Enunciado;
 import Model.UnidadDidactica;
 import java.sql.Connection;
 import java.sql.Date;
@@ -22,8 +23,7 @@ import java.util.ArrayList;
 import utilidades.Util;
 import java.time.format.DateTimeFormatter;
 
-
-public class Controller implements IController{
+public class Controller implements IController {
 
     private Connection conexion;
     private PreparedStatement sentencia;
@@ -33,61 +33,60 @@ public class Controller implements IController{
     private final String GETuds = "select * from UnidadDidactica";
     private final String ANADIRenunciadoACe = "UPDATE ConvocatoriaExamen SET id_Enunciado = ? WHERE convocatoria = ?";
     private final String GETces = "select * from ConvocatoriaExamen";
-
     final String getConvocatoria = "SELECT Convocatoria FROM ConvocatoriaExamen where id_Enunciado is null";
     final String getEnunciado = "SELECT id, descripcion FROM Enunciado";
-    final String UPDATEConvocatoria ="UPDATE ConvocatoriaExamen SET id_Enunciado = ? WHERE convocatoria = ?";
-    
+     private final String GETEnunciadoPorUD = "select * from Enunciado E, UD_Enunciado UDE where UDE.id_UD = ? and UDE.id_Enunciado = E.id";
+    final String UPDATEConvocatoria = "UPDATE ConvocatoriaExamen SET id_Enunciado = ? WHERE convocatoria = ?";
     final String INSERTARud = "INSERT INTO UnidadDidactica VALUES (?,?,?,?,?)";
     final String INSERTARce = "INSERT INTO ConvocatoriaExamen (convocatoria, descripcion, fecha, curso) VALUES (?,?,?,?)";
-    
+
     @Override
-	public void registrarUD(Integer id, String acronimo, String titulo, String evaluacion, String descripcion) {
-		this.openConnection();
-		
-		try {
-			sentencia = conexion.prepareStatement(INSERTARud);
-			
-			sentencia.setString(5, descripcion);
-			sentencia.setString(4, evaluacion);
-			sentencia.setString(3, titulo);
-			sentencia.setString(2, acronimo);
-			sentencia.setInt(1, id);
-			
-			sentencia.executeUpdate();
-			
-		} catch (SQLException e) {
-			System.out.println("Error de SQL");
-			e.printStackTrace();
-		} finally {
-                    this.closeConnection();
-		}
+    public void registrarUD(Integer id, String acronimo, String titulo, String evaluacion, String descripcion) {
+        this.openConnection();
 
-	}
-        
-        @Override
-	public void registrarConvocatoria(String convocatoria, String descripcion, LocalDate fecha, String curso) {
-		this.openConnection();
-                
-		try {
-			sentencia = conexion.prepareStatement(INSERTARce);
-			
-			sentencia.setString(2, descripcion);
-			sentencia.setString(4, curso);
-			sentencia.setDate(3, Date.valueOf(fecha));
-			sentencia.setString(1, convocatoria);
-			
-			sentencia.executeUpdate();
-			
-		} catch (SQLException e) {
-			System.out.println("Error de SQL");
-			e.printStackTrace();
-		} finally {
-                    this.closeConnection();
-		}
+        try {
+            sentencia = conexion.prepareStatement(INSERTARud);
 
-	}
-    
+            sentencia.setString(5, descripcion);
+            sentencia.setString(4, evaluacion);
+            sentencia.setString(3, titulo);
+            sentencia.setString(2, acronimo);
+            sentencia.setInt(1, id);
+
+            sentencia.executeUpdate();
+
+        } catch (SQLException e) {
+            System.out.println("Error de SQL");
+            e.printStackTrace();
+        } finally {
+            this.closeConnection();
+        }
+
+    }
+
+    @Override
+    public void registrarConvocatoria(String convocatoria, String descripcion, LocalDate fecha, String curso) {
+        this.openConnection();
+
+        try {
+            sentencia = conexion.prepareStatement(INSERTARce);
+
+            sentencia.setString(2, descripcion);
+            sentencia.setString(4, curso);
+            sentencia.setDate(3, Date.valueOf(fecha));
+            sentencia.setString(1, convocatoria);
+
+            sentencia.executeUpdate();
+
+        } catch (SQLException e) {
+            System.out.println("Error de SQL");
+            e.printStackTrace();
+        } finally {
+            this.closeConnection();
+        }
+
+    }
+
     private void openConnection() {
         try {
             String url = "jdbc:mysql://localhost:3306/examendb?serverTimezone=Europe/Madrid&useSSL=false";
@@ -244,7 +243,11 @@ public class Controller implements IController{
 
         return ces;
 
+    }
+
+    @Override
     public void asignarEnunciado() {
+
         this.openConnection();
         try {
             // 1. Mostrar convocatorias sin enunciado asignado
@@ -291,7 +294,7 @@ public class Controller implements IController{
 
             // 4. Preguntar al usuario por el ID del enunciado a asignar
             System.out.println("Introduzca el ID del enunciado que desea asignar: ");
-            int idEnunciado = Util.leerInt(); 
+            int idEnunciado = Util.leerInt();
             if (!enunciados.contains(idEnunciado)) {
                 System.out.println("El ID de enunciado introducido no es válido.");
                 return;
@@ -315,6 +318,40 @@ public class Controller implements IController{
         } finally {
             this.closeConnection();
         }
+
+    }
+
+    @Override
+    public ArrayList<Enunciado> getEnunciados(int id_UD) {
+
+        this.openConnection();
+        ArrayList<Enunciado> enunciados = new ArrayList<>();
+       
+
+        try {
+            sentencia = conexion.prepareStatement(GETEnunciadoPorUD);
+            sentencia.setInt(1, id_UD);
+            resultado = sentencia.executeQuery();
+
+            System.out.println("Enunciados:");
+            while (resultado.next()) {
+                
+                int id = resultado.getInt("id");
+                String descripcion = resultado.getString("descripcion");
+                String dificultadStr = resultado.getString("nivel");
+                Boolean disponible = resultado.getBoolean("disponible");
+                String ruta = resultado.getString("ruta");
+                Dificultad dificultad = Dificultad.valueOf(dificultadStr);
+                 Enunciado en = new Enunciado(id, descripcion, dificultad, disponible, ruta);
+            }
+            if (enunciados.isEmpty()) {
+                System.out.println("No hay enunciados disponibles para asignar.");
+
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return enunciados;
     }
 
 }

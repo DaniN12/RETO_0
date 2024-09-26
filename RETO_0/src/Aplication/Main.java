@@ -23,8 +23,7 @@ public class Main {
     public static void main(String[] args) {
         Controller c = new Controller();
         Integer menu = 0;
-        Controller c = new Controller();
-      
+
         do {
             System.out.println("\t\tBIENVENIDO A FLUTTER\n"
                     + "MENÚ:\n"
@@ -47,6 +46,7 @@ public class Main {
                     anadirEnunciado(c);
                     break;
                 case 3:
+                    mostrarEnunciadosPorUD(c);
                     break;
                 case 4:
                     break;
@@ -63,7 +63,7 @@ public class Main {
     }
 
     public static void anadirEnunciado(Controller c) {
-        
+
         Enunciado e = new Enunciado();
 
         do {
@@ -71,6 +71,7 @@ public class Main {
             c.anadirEnunciado(e.getId(), e.getDescripcion(), e.getNivel(), e.isDisponible(), e.getRuta());
 
             do {
+                 System.out.println("Selecciona la unidad didactica a la que deseas añadir el enunciado: ");
                 int id = arrayUDs(c);
                 c.anadirEnunciadoAUd(e.getId(), id);
                 System.out.println("¿Desea añadir mas enunciados a otras unidades didacticas? SI/NO");
@@ -94,7 +95,6 @@ public class Main {
 
         ArrayList<UnidadDidactica> uds = c.getUDs();
 
-        System.out.println("Selecciona la unidad didactica a la que deseas añadir el enunciado: ");
         for (UnidadDidactica ud : uds) {
             System.out.println(uds.indexOf(ud) + 1 + "- " + ud.getTitulo());
 
@@ -104,6 +104,16 @@ public class Main {
 
     }
 
+    public static ArrayList<Enunciado> arrayEnunciados(Controller c, int id) {
+
+        ArrayList<Enunciado> ens = c.getEnunciados(id);
+        for (Enunciado en : ens) {
+            System.out.println(ens.indexOf(en) + 1 + "- " + en.getDescripcion());
+
+        }
+        return ens;
+
+    }
     public static String arrayCEs(Controller c) {
 
         ArrayList<ConvocatoriaExamen> ces = c.getCEs();
@@ -119,12 +129,13 @@ public class Main {
         return ceSeleccionada.getConvocatoria();
 
     }
+
     public static void InsertarEnunciados(Controller controller) {
         // Preguntar al usuario por la convocatoria
         controller.asignarEnunciado();
     }
 
-    public static void insertarUDyCE (Controller c) {
+    public static void insertarUDyCE(Controller c) {
         UnidadDidactica ud = new UnidadDidactica();
         ConvocatoriaExamen ce = new ConvocatoriaExamen();
 
@@ -136,9 +147,9 @@ public class Main {
                 c.registrarUD(ud.getId(), ud.getAcronimo(), ud.getTitulo(), ud.getEvaluacion(), ud.getDescripcion());
 
                 System.out.println("¿Quieres añadir más Unidades Didácticas? ");
-            } while (Util.introducirCadena().equalsIgnoreCase("si"));      
+            } while (Util.introducirCadena().equalsIgnoreCase("si"));
         }
-        
+
         System.out.println("Quieres añadir convocatoria/s de exámen?");
         if (Util.introducirCadena().equalsIgnoreCase("si")) {
             do {
@@ -147,10 +158,25 @@ public class Main {
                 c.registrarConvocatoria(ce.getConvocatoria(), ce.getDescripcion(), ce.getFecha(), ce.getCurso());
 
                 System.out.println("¿Quieres añadir más Convocatorias de Exámen? ");
-            } while (Util.introducirCadena().equalsIgnoreCase("si"));  
+            } while (Util.introducirCadena().equalsIgnoreCase("si"));
 
         }
+
+    }
+
+    public static void mostrarEnunciadosPorUD(Controller c) {
         
-}
+        ArrayList<Enunciado> ens = new ArrayList();
+        
+        do {
+            
+            System.out.println("Seleccione la unidad didactica deseada");
+            int id = arrayUDs(c);
+            ens = arrayEnunciados(c, id);
+            System.out.println("¿Desea ver mas enunciados? SI/NO");
+
+        } while (!Util.introducirCadena().equalsIgnoreCase("NO"));
+
+    }
 
 }

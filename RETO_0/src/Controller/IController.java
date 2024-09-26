@@ -7,6 +7,7 @@ package Controller;
 
 import Model.ConvocatoriaExamen;
 import Model.Dificultad;
+import Model.Enunciado;
 import Model.UnidadDidactica;
 import java.util.ArrayList;
 import java.time.LocalDate;
@@ -28,5 +29,7 @@ public void asignarEnunciado();
 public void registrarUD(Integer id, String acronimo, String titulo, String evaluacion, String descripcion);
     
 public void registrarConvocatoria(String convocatoria, String descripcion, LocalDate fecha, String curso);
+
+public ArrayList<Enunciado> getEnunciados(int id_UD);
 
 }
