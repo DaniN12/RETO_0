@@ -72,19 +72,19 @@ public class Main {
 
     private static void consultarConvocatoria() {
         int id;
-        System.out.println("Introduzca el ID de un enunciado para consultar sus convocatorias:");
-        id = Util.leerInt();  // Leer el ID del enunciado
-
+        System.out.println("Introduzca el ID de un enunciado: ");
+        id = Util.leerInt();
+        
         IController controller = new Controller();  // Instanciar el controlador
-        List<String> convocatorias = controller.obtenerConvocatoriasDeEnunciado(id);  // Obtener las convocatorias del enunciado
-
-        if (convocatorias != null && !convocatorias.isEmpty()) {
-            System.out.println("El enunciado ha sido utilizado en las siguientes convocatorias:");
-            for (String convocatoria : convocatorias) {
-                System.out.println("- " + convocatoria);  // Mostrar cada convocatoria
-            }
+        List<String> convocatorias = controller.obtenerConvocatoriasDeEnunciado(id);
+        
+        if (convocatorias.isEmpty()) {
+            System.out.println("El enunciado no está asociado a ninguna convocatoria.");
         } else {
-            System.out.println("El enunciado no ha sido utilizado en ninguna convocatoria o no existe.");
+            System.out.println("Convocatorias asociadas al enunciado con ID " + id + ":");
+            for (String convocatoria : convocatorias) {
+                System.out.println("- " + convocatoria);
+            }
         }
     }
 

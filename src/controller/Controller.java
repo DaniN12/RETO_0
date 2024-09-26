@@ -8,8 +8,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-
-public class Controller implements IController{
+public class Controller implements IController {
 
     private Connection conexion;
     private PreparedStatement sentencia;
@@ -17,8 +16,14 @@ public class Controller implements IController{
 
     private void openConnection() {
         try {
+            // Registrar el driver JDBC
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            
             String url = "jdbc:mysql://localhost:3306/examendb?serverTimezone=Europe/Madrid&useSSL=false";
             conexion = DriverManager.getConnection(url, "root", "abcd*1234");
+        } catch (ClassNotFoundException e) {
+            System.out.println("Driver JDBC no encontrado: " + e.getMessage());
+            e.printStackTrace();
         } catch (SQLException error) {
             System.out.println("Error al intentar abrir la BD: " + error.getMessage());
             error.printStackTrace();
@@ -30,7 +35,7 @@ public class Controller implements IController{
             if (sentencia != null) {
                 sentencia.close();
             }
-            if (sentencia != null) {
+            if (conexion != null) {
                 conexion.close();
             }
         } catch (SQLException error) {
@@ -44,7 +49,7 @@ public class Controller implements IController{
         String ruta = null;
         try {
             openConnection();  // Abrir conexión
-            String query = "SELECT ruta FROM Enunciado WHERE id_Enunciado = ?";
+            String query = "SELECT ruta FROM Enunciado WHERE id = ?";
             sentencia = conexion.prepareStatement(query);
             sentencia.setInt(1, idEnunciado);
             resultado = sentencia.executeQuery();
@@ -65,17 +70,25 @@ public class Controller implements IController{
 
     @Override
     public List<String> obtenerConvocatoriasDeEnunciado(int idEnunciado) {
-        // Aquí va la lógica para obtener las convocatorias desde la base de datos o servicio
-
-        // Simulamos algunos datos para el enunciado con ID 1
-        if (idEnunciado == 1) {
-            List<String> convocatorias = new ArrayList<>();
-            convocatorias.add("Convocatoria Enero 2024");
-            convocatorias.add("Convocatoria Junio 2024");
-            return convocatorias;
-        } else {
-            return new ArrayList<>();  // Si el enunciado no se ha usado en ninguna convocatoria
+        List<String> convocatorias = new ArrayList<>();
+        try {
+            openConnection();  // Abrir conexión
+            String query = "SELECT c.convocatoria FROM ConvocatoriaExamen c " +
+                           "JOIN Enunciado e ON c.id_Enunciado = e.id " +
+                           "WHERE e.id = ?";
+            sentencia = conexion.prepareStatement(query);
+            sentencia.setInt(1, idEnunciado);
+            resultado = sentencia.executeQuery();
+            
+            while (resultado.next()) {
+                convocatorias.add(resultado.getString("convocatoria"));
+            }
+        } catch (SQLException error) {
+            System.out.println("Error al consultar convocatorias: " + error.getMessage());
+            error.printStackTrace();
+        } finally {
+            closeConnection();  // Cerrar conexión
         }
+        return convocatorias;
     }
-
 }
