@@ -83,13 +83,14 @@ public class UnidadDidactica {
         
         System.out.println("");
     }
-    public void setDatos() {
-                System.out.println("ID de la Unidad Didáctica: ");
-		this.id = Util.leerInt();
-		System.out.println("Acrónimo de la Unidad Didáctica: ");
-		this.acronimo =  Util.introducirCadena();
+    
+    public void setDatos(Controller c) {
 		System.out.println("Título de la Unidad Didáctica: ");
 		this.titulo =  Util.introducirCadena();
+                String[] resultado = c.getUltimoIdUD(this.titulo);
+                // Asignar el acrónimo e ID con los valores generados
+                this.acronimo = resultado[0]; // El acrónimo es nextID
+                this.id = Integer.parseInt(resultado[1]); // El ID es lastID
 		System.out.println("Evaluación de la Unidad Didáctica: ");
 		this.evaluacion =  Util.introducirCadena();
                 System.out.println("Descripción breve de la Unidad Didáctica: ");

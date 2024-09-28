@@ -39,6 +39,7 @@ public class Controller implements IController {
     final String UPDATEConvocatoria = "UPDATE ConvocatoriaExamen SET id_Enunciado = ? WHERE convocatoria = ?";
     final String INSERTARud = "INSERT INTO UnidadDidactica VALUES (?,?,?,?,?)";
     final String INSERTARce = "INSERT INTO ConvocatoriaExamen (convocatoria, descripcion, fecha, curso) VALUES (?,?,?,?)";
+    final String GetUltimoIdUD = "call GetNextIDFromUD(?)";
 
     @Override
     public void registrarUD(Integer id, String acronimo, String titulo, String evaluacion, String descripcion) {
@@ -97,6 +98,32 @@ public class Controller implements IController {
         }
     }
 
+    @Override
+	public String[] getUltimoIdUD(String titulo) {
+	    this.openConnection();
+	    ResultSet rs = null;
+	    String acronimo = "";
+            int id = 0;
+	    
+	    try {
+	        sentencia = conexion.prepareStatement(GetUltimoIdUD);
+	       
+                sentencia.setString(1, titulo);
+                
+	        rs = sentencia.executeQuery();
+	        
+	        if (rs.next()) {
+	            acronimo = rs.getString("NextID");
+                    id = rs.getInt("LastID");
+	        }
+	    } catch (SQLException e) {
+	        System.out.println("Error en la consulta de la BD");
+	        e.printStackTrace();
+	    }
+	    
+	    return new String[] { acronimo, Integer.toString(id) };
+	}
+    
     private void closeConnection() {
         try {
             if (sentencia != null) {

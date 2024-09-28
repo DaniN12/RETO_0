@@ -32,4 +32,6 @@ public void registrarConvocatoria(String convocatoria, String descripcion, Local
 
 public ArrayList<Enunciado> getEnunciados(int id_UD);
 
+public String[] getUltimoIdUD(String titulo);
+
 }

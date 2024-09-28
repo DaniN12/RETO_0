@@ -142,7 +142,7 @@ public class Main {
         System.out.println("Quieres añadir unidad/es didáctica/s?");
         if (Util.introducirCadena().equalsIgnoreCase("si")) {
             do {
-                ud.setDatos();
+                ud.setDatos(c);
 
                 c.registrarUD(ud.getId(), ud.getAcronimo(), ud.getTitulo(), ud.getEvaluacion(), ud.getDescripcion());
 
