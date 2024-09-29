@@ -16,12 +16,11 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.ArrayList;
 import utilidades.Util;
-import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 public class Controller implements IController {
 
@@ -383,6 +382,54 @@ public class Controller implements IController {
             Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);
         }
         return enunciados;
+    }
+
+    @Override
+    public String obtenerRutaDocumentoEnunciado(int idEnunciado) {
+                String ruta = null;
+        try {
+            openConnection();  // Abrir conexión
+            String query = "SELECT ruta FROM Enunciado WHERE id = ?";
+            sentencia = conexion.prepareStatement(query);
+            sentencia.setInt(1, idEnunciado);
+            resultado = sentencia.executeQuery();
+            
+            if (resultado.next()) {
+                ruta = resultado.getString("ruta");
+            } else {
+                System.out.println("Ruta no encontrada.");
+            }
+        } catch (SQLException error) {
+            System.out.println("Error al consultar enunciado: " + error.getMessage());
+            error.printStackTrace();
+        } finally {
+            closeConnection();  // Cerrar conexión
+        }
+        return ruta;
+    }
+
+    @Override
+    public List<String> obtenerConvocatoriasDeEnunciado(int idEnunciado) {
+         List<String> convocatorias = new ArrayList<>();
+        try {
+            openConnection();  // Abrir conexión
+            String query = "SELECT c.convocatoria FROM ConvocatoriaExamen c " +
+                           "JOIN Enunciado e ON c.id_Enunciado = e.id " +
+                           "WHERE e.id = ?";
+            sentencia = conexion.prepareStatement(query);
+            sentencia.setInt(1, idEnunciado);
+            resultado = sentencia.executeQuery();
+            
+            while (resultado.next()) {
+                convocatorias.add(resultado.getString("convocatoria"));
+            }
+        } catch (SQLException error) {
+            System.out.println("Error al consultar convocatorias: " + error.getMessage());
+            error.printStackTrace();
+        } finally {
+            closeConnection();  // Cerrar conexión
+        }
+        return convocatorias;
     }
 
 }

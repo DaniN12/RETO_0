@@ -6,12 +6,15 @@
 package Aplication;
 
 import Controller.Controller;
+import Controller.IController;
 import Model.ConvocatoriaExamen;
 import Model.Enunciado;
-import Model.UnidadDidactica;
 import java.util.ArrayList;
 import Model.UnidadDidactica;
-import java.time.LocalDate;
+import java.awt.Desktop;
+import java.io.File;
+import java.io.IOException;
+import java.util.List;
 import utilidades.Util;
 
 /**
@@ -49,13 +52,16 @@ public class Main {
                     mostrarEnunciadosPorUD(c);
                     break;
                 case 4:
+                     consultarConvocatoria();
                     break;
                 case 5:
+                    visualizarDocumento();
                     break;
                 case 6:
                     InsertarEnunciados(c);
                     break;
                 case 0:
+                     System.out.println("Adiós, que Dios te bendiga.");
 
             }
 
@@ -183,4 +189,53 @@ public class Main {
 
     }
 
+    private static void consultarConvocatoria() {
+        int id;
+        System.out.println("Introduzca el ID de un enunciado: ");
+        id = Util.leerInt();
+
+        IController controller = new Controller();  // Instanciar el controlador
+        List<String> convocatorias = controller.obtenerConvocatoriasDeEnunciado(id);
+
+        if (convocatorias.isEmpty()) {
+            System.out.println("El enunciado no está asociado a ninguna convocatoria.");
+        } else {
+            System.out.println("Convocatorias asociadas al enunciado con ID " + id + ":");
+            for (String convocatoria : convocatorias) {
+                System.out.println("- " + convocatoria);
+            }
+        }
+    }
+
+     private static void visualizarDocumento() {
+    int id;
+    System.out.println("Introduzca el ID de un enunciado: ");
+    id = Util.leerInt();  // Asegúrate de que leerInt maneja correctamente errores de entrada.
+
+    Controller controller = new Controller();  // Instanciar el controlador
+    String ruta = controller.obtenerRutaDocumentoEnunciado(id);  // Obtener la ruta del documento desde la base de datos
+
+    // Imprimir la ruta para depuración
+    System.out.println("Ruta del archivo: " + ruta);
+
+    if (ruta != null && !ruta.isEmpty()) {
+        File archivo = new File(ruta);
+        System.out.println("Verificando existencia del archivo...");
+
+        if (archivo.exists() && archivo.isFile()) {
+            try {
+                Desktop desktop = Desktop.getDesktop();
+                desktop.open(archivo);  // Abrir el archivo en la aplicación predeterminada
+            } catch (IOException e) {
+                System.out.println("Error al abrir el archivo: " + e.getMessage());
+            } catch (UnsupportedOperationException e) {
+                System.out.println("La operación no es soportada en este sistema.");
+            }
+        } else {
+            System.out.println("El archivo no existe o no es un archivo válido.");
+        }
+    } else {
+        System.out.println("Enunciado no encontrado o la ruta es inválida.");
+    }
+}
 }
