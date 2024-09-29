@@ -5,6 +5,9 @@
  */
 package Model;
 
+import Controller.Controller;
+import utilidades.Util;
+
 public class UnidadDidactica {
 
     private int id;
@@ -75,4 +78,22 @@ public class UnidadDidactica {
     public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
     }
+    
+    public void getDatos(){
+        
+        System.out.println("");
+    }
+    
+    public void setDatos(Controller c) {
+		System.out.println("Título de la Unidad Didáctica: ");
+		this.titulo =  Util.introducirCadena();
+                String[] resultado = c.getUltimoIdUD(this.titulo);
+                // Asignar el acrónimo e ID con los valores generados
+                this.acronimo = resultado[0]; // El acrónimo es nextID
+                this.id = Integer.parseInt(resultado[1]); // El ID es lastID
+		System.out.println("Evaluación de la Unidad Didáctica: ");
+		this.evaluacion =  Util.introducirCadena();
+                System.out.println("Descripción breve de la Unidad Didáctica: ");
+		this.descripcion =  Util.introducirCadena();
+	}
 }

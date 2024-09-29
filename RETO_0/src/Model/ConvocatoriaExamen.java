@@ -6,6 +6,11 @@
 package Model;
 
 import java.time.LocalDate;
+import java.time.Month;
+import java.time.format.DateTimeParseException;
+import java.time.format.TextStyle;
+import java.util.Locale;
+import utilidades.Util;
 
 public class ConvocatoriaExamen {
 
@@ -66,4 +71,29 @@ public class ConvocatoriaExamen {
     public void setCurso(String curso) {
         this.curso = curso;
     }
+    
+    public void setDatos() {
+        Boolean bien = false;
+        
+        System.out.println("Descripción breve de la Convocatoria de Exámen: ");
+        this.descripcion =  Util.introducirCadena();
+        do {
+            System.out.println("Fecha de la Convocatoria de Exámen: (dd/MM/yyyy)");
+            try {
+                this.fecha = Util.leerFechaDMA();
+                bien = true;
+            } catch (DateTimeParseException e) {
+                System.out.println("Formato de fecha incorrecto. Intenta de nuevo.");
+            }
+        } while (!bien);
+        // Extraer el año y el mes
+        String anio = String.valueOf(this.fecha.getYear());
+        Month mes = this.fecha.getMonth();
+        // Generar la convocatoria en el formato "convAÑO_MES"
+        this.convocatoria = "conv" + anio + "_" + mes.getDisplayName(TextStyle.SHORT, Locale.ENGLISH).toLowerCase();
+        System.out.println("Curso de la Convocatoria de Exámen: ");
+        this.curso =  Util.introducirCadena();
+        
+}
+    
 }
