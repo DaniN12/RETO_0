@@ -5,14 +5,13 @@
  */
 package aplication;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
 import java.util.List;
 
 import controller.Controller;
 import controller.IController;
+import java.awt.Desktop;
 import utilidades.Util;
 
 /**
@@ -90,33 +89,36 @@ public class Main {
 
     private static void visualizarDocumento() {
     int id;
-    System.out.println("Introuzca el ID de un enunciado: ");
-    id = Util.leerInt();
-    
-    IController controller = new Controller();  // Instanciar el controlador
+    System.out.println("Introduzca el ID de un enunciado: ");
+    id = Util.leerInt();  // Asegúrate de que leerInt maneja correctamente errores de entrada.
+
+    Controller controller = new Controller();  // Instanciar el controlador
     String ruta = controller.obtenerRutaDocumentoEnunciado(id);  // Obtener la ruta del documento desde la base de datos
-    
-    if (ruta != null) {
+
+    // Imprimir la ruta para depuración
+    System.out.println("Ruta del archivo: " + ruta);
+
+    if (ruta != null && !ruta.isEmpty()) {
         File archivo = new File(ruta);
+        System.out.println("Verificando existencia del archivo...");
+
         if (archivo.exists() && archivo.isFile()) {
-            System.out.println("Contenido del archivo:");
             try {
-                BufferedReader reader = new BufferedReader(new FileReader(archivo));
-                String linea;
-                while ((linea = reader.readLine()) != null) {
-                    System.out.println(linea);  // Mostrar cada línea del archivo
-                }
-                reader.close();
+                Desktop desktop = Desktop.getDesktop();
+                desktop.open(archivo);  // Abrir el archivo en la aplicación predeterminada
             } catch (IOException e) {
-                System.out.println("Error al leer el archivo: " + e.getMessage());
+                System.out.println("Error al abrir el archivo: " + e.getMessage());
+            } catch (UnsupportedOperationException e) {
+                System.out.println("La operación no es soportada en este sistema.");
             }
         } else {
             System.out.println("El archivo no existe o no es un archivo válido.");
         }
     } else {
-        System.out.println("Enunciado no encontrado.");
+        System.out.println("Enunciado no encontrado o la ruta es inválida.");
     }
 }
+
 
 
 }

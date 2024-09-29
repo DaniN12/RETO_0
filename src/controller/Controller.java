@@ -57,7 +57,7 @@ public class Controller implements IController {
             if (resultado.next()) {
                 ruta = resultado.getString("ruta");
             } else {
-                System.out.println("Enunciado no encontrado.");
+                System.out.println("Ruta no encontrada.");
             }
         } catch (SQLException error) {
             System.out.println("Error al consultar enunciado: " + error.getMessage());
