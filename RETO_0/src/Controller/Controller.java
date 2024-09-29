@@ -35,7 +35,11 @@ public class Controller implements IController {
     private final String GETces = "select * from ConvocatoriaExamen";
     final String getConvocatoria = "SELECT Convocatoria FROM ConvocatoriaExamen where id_Enunciado is null";
     final String getEnunciado = "SELECT id, descripcion FROM Enunciado";
-     private final String GETEnunciadoPorUD = "select * from Enunciado E, UD_Enunciado UDE where UDE.id_UD = ? and UDE.id_Enunciado = E.id";
+    private final String GETEnunciadoPorUD = "SELECT e.* "
+            + "FROM Enunciado e "
+            + "JOIN UD_Enunciado ud_en ON e.id = ud_en.id_Enunciado "
+            + "JOIN UnidadDidactica ud ON ud_en.id_UD = ud.id "
+            + "WHERE ud.id = ?";
     final String UPDATEConvocatoria = "UPDATE ConvocatoriaExamen SET id_Enunciado = ? WHERE convocatoria = ?";
     final String INSERTARud = "INSERT INTO UnidadDidactica VALUES (?,?,?,?,?)";
     final String INSERTARce = "INSERT INTO ConvocatoriaExamen (convocatoria, descripcion, fecha, curso) VALUES (?,?,?,?)";
@@ -99,31 +103,31 @@ public class Controller implements IController {
     }
 
     @Override
-	public String[] getUltimoIdUD(String titulo) {
-	    this.openConnection();
-	    ResultSet rs = null;
-	    String acronimo = "";
-            int id = 0;
-	    
-	    try {
-	        sentencia = conexion.prepareStatement(GetUltimoIdUD);
-	       
-                sentencia.setString(1, titulo);
-                
-	        rs = sentencia.executeQuery();
-	        
-	        if (rs.next()) {
-	            acronimo = rs.getString("NextID");
-                    id = rs.getInt("LastID");
-	        }
-	    } catch (SQLException e) {
-	        System.out.println("Error en la consulta de la BD");
-	        e.printStackTrace();
-	    }
-	    
-	    return new String[] { acronimo, Integer.toString(id) };
-	}
-    
+    public String[] getUltimoIdUD(String titulo) {
+        this.openConnection();
+        ResultSet rs = null;
+        String acronimo = "";
+        int id = 0;
+
+        try {
+            sentencia = conexion.prepareStatement(GetUltimoIdUD);
+
+            sentencia.setString(1, titulo);
+
+            rs = sentencia.executeQuery();
+
+            if (rs.next()) {
+                acronimo = rs.getString("NextID");
+                id = rs.getInt("LastID");
+            }
+        } catch (SQLException e) {
+            System.out.println("Error en la consulta de la BD");
+            e.printStackTrace();
+        }
+
+        return new String[]{acronimo, Integer.toString(id)};
+    }
+
     private void closeConnection() {
         try {
             if (sentencia != null) {
@@ -353,7 +357,6 @@ public class Controller implements IController {
 
         this.openConnection();
         ArrayList<Enunciado> enunciados = new ArrayList<>();
-       
 
         try {
             sentencia = conexion.prepareStatement(GETEnunciadoPorUD);
@@ -362,14 +365,15 @@ public class Controller implements IController {
 
             System.out.println("Enunciados:");
             while (resultado.next()) {
-                
+
                 int id = resultado.getInt("id");
                 String descripcion = resultado.getString("descripcion");
                 String dificultadStr = resultado.getString("nivel");
                 Boolean disponible = resultado.getBoolean("disponible");
                 String ruta = resultado.getString("ruta");
                 Dificultad dificultad = Dificultad.valueOf(dificultadStr);
-                 Enunciado en = new Enunciado(id, descripcion, dificultad, disponible, ruta);
+                Enunciado en = new Enunciado(id, descripcion, dificultad, disponible, ruta);
+                enunciados.add(en);
             }
             if (enunciados.isEmpty()) {
                 System.out.println("No hay enunciados disponibles para asignar.");

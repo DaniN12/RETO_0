@@ -71,7 +71,7 @@ public class Main {
             c.anadirEnunciado(e.getId(), e.getDescripcion(), e.getNivel(), e.isDisponible(), e.getRuta());
 
             do {
-                 System.out.println("Selecciona la unidad didactica a la que deseas añadir el enunciado: ");
+                System.out.println("Selecciona la unidad didactica a la que deseas añadir el enunciado: ");
                 int id = arrayUDs(c);
                 c.anadirEnunciadoAUd(e.getId(), id);
                 System.out.println("¿Desea añadir mas enunciados a otras unidades didacticas? SI/NO");
@@ -108,12 +108,16 @@ public class Main {
 
         ArrayList<Enunciado> ens = c.getEnunciados(id);
         for (Enunciado en : ens) {
-            System.out.println(ens.indexOf(en) + 1 + "- " + en.getDescripcion());
-
+            System.out.println("ID: " + en.getId());
+            System.out.println("Descripción: " + en.getDescripcion());
+            System.out.println("Nivel: " + en.getNivel());
+            System.out.println("Disponible: " + en.isDisponible());
+            System.out.println("Ruta: " + en.getRuta());
         }
         return ens;
 
     }
+
     public static String arrayCEs(Controller c) {
 
         ArrayList<ConvocatoriaExamen> ces = c.getCEs();
@@ -165,11 +169,11 @@ public class Main {
     }
 
     public static void mostrarEnunciadosPorUD(Controller c) {
-        
+
         ArrayList<Enunciado> ens = new ArrayList();
-        
+
         do {
-            
+
             System.out.println("Seleccione la unidad didactica deseada");
             int id = arrayUDs(c);
             ens = arrayEnunciados(c, id);
